@@ -29,6 +29,27 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+#append rooms to get exits
+#do a loop when len(stack) > 0
+#append directions
+#keep track of visited locations
+#keep track of directions taken and stack pops off when we go backwards
+
+opp = {
+    's' : 'n',
+    'n' : 's'
+    'e' : 'w',
+    'w' : 'e'
+}
+
+def go_backwards(rev_list):
+    rev_list.reverse()
+    for direction in rev_list:
+        Player.travel(direction)
+        traversal_path.append(direction)
+
+
+
 
 
 # TRAVERSAL TEST - DO NOT MODIFY
