@@ -29,27 +29,50 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
-#append rooms to get exits
-#do a loop when len(stack) > 0
-#append directions
-#keep track of visited locations
-#keep track of directions taken and stack pops off when we go backwards
-
 opp = {
     's' : 'n',
-    'n' : 's'
+    'n' : 's',
     'e' : 'w',
     'w' : 'e'
 }
 
-def go_backwards(rev_list):
-    rev_list.reverse()
-    for direction in rev_list:
-        Player.travel(direction)
-        traversal_path.append(direction)
+rev_list = []
 
+#track visited rooms
+visited = set()
 
+#keep moving while there are still more rooms left than visited 
+while len(room_graph) - 1 > len(visited) - 1:
+    #initialize player_move at 0
+    player_move = 0
 
+    #loop over the rooms available
+    for direction in player.current_room.get_exits():
+        #check if that room in that direction is in visited, if not move to that direction
+        if player.current_room.get_room_in_direction(direction) not in visited:
+            player_move = direction
+
+    #if you still have a direction to go in, append player_move to traversal_path
+    if player_move is not 0:
+        traversal_path.append(player_move)
+
+        #append the reverse directions to move back
+        rev_list.append(opp[player_move])
+
+        #travel in the direction of the player_move
+        player.travel(player_move)
+
+        #track the visited rooms
+        visited.add(player.current_room)
+    else:
+        #if upcoming move is 0, pop rev_list and set it to player_move to reverse directions
+        player_move = rev_list.pop()
+
+        #add it to traversal_path
+        traversal_path.append(player_move)
+
+        #travel in that direction
+        player.travel(player_move)
 
 
 # TRAVERSAL TEST - DO NOT MODIFY
